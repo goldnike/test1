@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КОНИКИ</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(160deg, #f8e6d2, #f2d2b6, #ffe8cc);
+        font-family: "Playfair Display", serif;
+        color: #5a3321;
+        text-align: center;
+    }
+
+    .title-page {
+        margin: 25px 0 15px 0;
+        font-size: 23px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        color: #8a4b2a;
+        text-shadow: 0 3px 10px rgba(150, 80, 40, 0.25);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 240, 230, 0.9);
+        border: 1px solid rgba(255, 200, 170, 0.6);
+        margin: 15px;
+        border-radius: 15px;
+    }
+
+    .title-page_general {
+        color: #000;
+    }
+
+    .carousel {
+        max-width: 600px;
+        margin: 25px 10px;
+        overflow: hidden;
+        border-radius: 28px;
+        position: relative;
+        border: 3px solid rgba(255, 220, 180, 0.8);
+        box-shadow: 0 15px 40px rgba(180, 120, 80, 0.35),
+            0 0 25px rgba(250, 200, 150, 0.4);
+        background: rgba(255, 240, 220, 0.65);
+        backdrop-filter: blur(6px);
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.45s ease;
+    }
+
+    .slide {
+        min-width: 100%;
+        user-select: none;
+        overflow: hidden;
+        position: relative;
+    }
+
+.slide {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* ЦЕНТРУЄ ПО ВЕРТИКАЛІ */
+    overflow: hidden;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;           /* щоб не тягнуло */
+    object-fit: contain;    /* все вміститься по ширині */
+    object-position: center;/* по центру вертикально */
+    transition: transform 0.8s ease, filter 0.8s ease;
+}
+
+
+    .slide video {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .carousel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        box-shadow:
+            0 0 40px rgba(255, 210, 180, 0.35) inset,
+            0 0 25px rgba(255, 180, 140, 0.4) inset;
+    }
+
+    .comment-box {
+        max-width: 600px;
+        margin: 35px auto;
+        padding: 20px;
+        background: rgba(255, 240, 225, 0.75);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(180, 130, 90, 0.35);
+        border: 2px solid rgba(255, 210, 180, 0.8);
+        backdrop-filter: blur(6px);
+    }
+
+    .comment-box h2 {
+        font-family: "Playfair Display", serif;
+        color: #8a4b2a;
+        margin-bottom: 10px;
+    }
+
+    #commentName,
+    #commentText {
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(160, 100, 60, 0.35);
+        background: rgba(255, 250, 245, 0.8);
+        font-size: 16px;
+        font-family: "Playfair Display", serif;
+        color: #5a3321;
+    }
+
+    #commentText {
+        height: 110px;
+        resize: none;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px 22px;
+        border-radius: 14px;
+        border: none;
+        background: #f4c49c;
+        color: #5a3321;
+        font-size: 17px;
+        cursor: pointer;
+        font-family: "Playfair Display", serif;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(180, 120, 80, 0.3);
+    }
+
+    button:hover {
+        background: #e9b587;
+    }
+
+    .comments-list {
+        max-width: 600px;
+        margin: 20px auto 40px;
+    }
+
+    .comment-item {
+        background: rgba(255, 240, 230, 0.9);
+        border: 1px solid rgba(255, 200, 170, 0.6);
+        padding: 15px;
+        margin: 15px;
+        border-radius: 15px;
+        font-family: "Playfair Display", serif;
+    }
+
+    .comment-meta {
+        font-size: 14px;
+        color: #8a4b2a;
+        margin-bottom: 5px;
+    }
+
+    #commentForm {
+        max-width: 600px;
+        margin: 35px 15px 60px;
+        padding: 25px;
+        background: rgba(255, 240, 225, 0.75);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(180, 130, 90, 0.35);
+        border: 2px solid rgba(255, 210, 180, 0.8);
+        backdrop-filter: blur(6px);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #commentForm input,
+    #commentForm textarea {
+        padding: 14px;
+        font-size: 17px;
+        border-radius: 14px;
+        border: 1px solid rgba(160, 100, 60, 0.35);
+        background: rgba(255, 250, 245, 0.9);
+        font-family: "Playfair Display", serif;
+        color: #5a3321;
+        outline: none;
+        transition: 0.25s ease;
+    }
+
+    #commentForm input:focus,
+    #commentForm textarea:focus {
+        border-color: rgba(200, 140, 90, 0.8);
+        box-shadow: 0 0 12px rgba(230, 170, 120, 0.45);
+    }
+
+    #commentForm textarea {
+        min-height: 120px;
+        resize: none;
+    }
+
+    #commentForm button {
+        margin-top: 5px;
+        padding: 12px 25px;
+        border-radius: 16px;
+        border: none;
+        background: #f4c49c;
+        color: #5a3321;
+        font-size: 18px;
+        cursor: pointer;
+        font-family: "Playfair Display", serif;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 15px rgba(180, 120, 80, 0.3);
+    }
+
+    #commentForm button:hover {
+        background: #e9b587;
+        transform: translateY(-2px);
+    }
+
+    #commentForm button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(180, 120, 80, 0.25);
+    }
+</style>
+
+<body>
+    <h1 class="title-page">
+        <p class="title-page_general">Подія:</p>Коники 31.10.25
+    </h1>
+    <div class="carousel">
+        <div class="carousel-track">
+            <div class="slide">
+                <img src="./img/takIMG_6414.jpg" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8432.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8435.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8436.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8437.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8439.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8446.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8449.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8447.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8450.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8451.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8452.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8457.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8459.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8477.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8478.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8504.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8505.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8506.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8507.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8508.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8509.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8512.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8513.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8514.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8515.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8516.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8520.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8521.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8522.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8523.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8524.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8525.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8526.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8527.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8528.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8529.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8530.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8531.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8532.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8533.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_5838.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_5839.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8566.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8543.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8574.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8575.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_5840.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_5845.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_5846.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_5849.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_5850.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8576.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8580.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8589.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8591.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8592.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8593.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8594.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8595.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8596.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8597.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8598.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8599.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8600.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8601.mp4" controls></video>
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8615.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8617.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8618.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8619.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8620.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <img src="./img/takIMG_8622.JPG" alt="" />
+            </div>
+            <div class="slide">
+                <video src="./img/takIMG_8624.mp4" controls></video>
+            </div>
+        </div>
+    </div>
+    <div id="comments"></div>
+
+    <form id="commentForm">
+        <input type="text" id="name" placeholder="Ваше ім'я" required>
+        <textarea id="comment" placeholder="Ваш коментар" required></textarea>
+        <button type="submit">Відправити</button>
+    </form>
+
+
+    <!-- FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue }
+            from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        // === ТУТ ЗАМІНИ СВІЙ URL ===
+        const firebaseConfig = {
+            databaseURL: "https://test-1-1387d-default-rtdb.firebaseio.com"
+        };
+        // ===========================
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const listRef = ref(db, "comments");
+
+        // ==== ВИВЕДЕННЯ КОМЕНТАРІВ ЗАВЖДИ ====
+        onValue(listRef, (snapshot) => {
+            const commentsBox = document.getElementById("comments");
+            commentsBox.innerHTML = ""; // очищаємо
+
+            snapshot.forEach(child => {
+                const data = child.val();
+
+                const div = document.createElement("div");
+                div.className = "comment-item";
+
+                div.innerHTML = `
+            <div><strong>${data.name}</strong> — ${data.datetime}</div>
+            <div>${data.text}</div>
+        `;
+
+                commentsBox.appendChild(div);
+            });
+        });
+
+        // ==== ВІДПРАВКА КОМЕНТАРЯ ====
+        document.getElementById("commentForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const text = document.getElementById("comment").value.trim();
+
+            if (!name || !text) return;
+
+            const now = new Date();
+            const date = now.toLocaleDateString("uk-UA");
+            const time = now.toLocaleTimeString("uk-UA", {
+                hour: "2-digit", minute: "2-digit"
+            });
+
+            push(listRef, {
+                name: name,
+                text: text,
+                datetime: `${date} ${time}`
+            });
+
+            document.getElementById("commentForm").reset();
+        });
+    </script>
+
+
+    <script>
+        const track = document.querySelector(".carousel-track");
+        const slides = Array.from(document.querySelectorAll(".slide"));
+
+        let currentSlide = 0;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        function updateSlidePosition() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        track.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        track.addEventListener("touchmove", (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+        });
+
+        track.addEventListener("touchend", () => {
+            if (!isDragging) return;
+
+            let diff = startX - currentX;
+
+            if (diff > 50) {
+                currentSlide = (currentSlide + 1) % slides.length;
+            } else if (diff < -50) {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            }
+
+            updateSlidePosition();
+            isDragging = false;
+        });
+    </script>
+
+</body>
+
+</html>
