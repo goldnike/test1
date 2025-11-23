@@ -227,18 +227,65 @@
         transform: translateY(0);
         box-shadow: 0 2px 8px rgba(180, 120, 80, 0.25);
     }
+
     .slide video {
-    pointer-events: none;
-}
+        pointer-events: none;
+    }
+
     .slide video {
         touch-action: none !important;
     }
 
     /* щоб відео не починало drag-ефект і не заважало свайпу */
-.slide video {
-  -webkit-user-drag: none;
-  user-select: none;
-  touch-action: none; /* важливо для деяких браузерів: дозволяє нашій логіці контролювати свайп */
+    .slide video {
+        -webkit-user-drag: none;
+        user-select: none;
+        touch-action: none;
+        /* важливо для деяких браузерів: дозволяє нашій логіці контролювати свайп */
+    }
+
+
+
+
+
+
+
+    .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.35s ease;
+}
+
+.slide {
+    min-width: 100%;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    font-size: 28px;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 10;
+    user-select: none;
+}
+
+.carousel-arrow.left {
+    left: 10px;
+}
+
+.carousel-arrow.right {
+    right: 10px;
 }
 
 </style>
@@ -248,6 +295,8 @@
         <p class="title-page_general">Подія:</p>Коники 31.10.25
     </h1>
     <div class="carousel">
+        <button class="carousel-arrow left">&#10094;</button>
+
         <div class="carousel-track">
             <div class="slide">
                 <img src="https://res.cloudinary.com/dcfqttv0v/image/upload/v1763892930/IMG_6414_u3rsdh.jpg"
@@ -542,6 +591,8 @@
                     controls></video>
             </div>
         </div>
+        <button class="carousel-arrow right">&#10095;</button>
+
     </div>
     <div id="comments"></div>
 
@@ -550,60 +601,31 @@
         <textarea id="comment" placeholder="Ваш коментар" required></textarea>
         <button type="submit">Відправити</button>
     </form>
-<script>
- (function () {
-  const track = document.querySelector(".carousel-track");
-  const slides = document.querySelectorAll(".slide");
-  let index = 0;
+   <script>
+    const track = document.querySelector(".carousel-track");
+    const slides = document.querySelectorAll(".slide");
+    const btnLeft = document.querySelector(".carousel-arrow.left");
+    const btnRight = document.querySelector(".carousel-arrow.right");
 
-  let startX = 0;
-  let currentX = 0;
-  let isDragging = false;
+    let index = 0;
 
-  function update() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-  }
+    function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+    }
 
-  function onTouchStart(e) {
-    startX = e.touches[0].clientX;
-    currentX = startX;
-    isDragging = true;
-  }
+    btnRight.addEventListener("click", () => {
+        if (index < slides.length - 1) index++;
+        update();
+    });
 
-  function onTouchMove(e) {
-    if (!isDragging) return;
-    currentX = e.touches[0].clientX;
-    e.preventDefault(); // працює, бо passive:false
-  }
-
-  function onTouchEnd() {
-    if (!isDragging) return;
-
-    const diff = startX - currentX;
-    const threshold = 40;
-
-    if (diff > threshold && index < slides.length - 1) index++;
-    else if (diff < -threshold && index > 0) index--;
+    btnLeft.addEventListener("click", () => {
+        if (index > 0) index--;
+        update();
+    });
 
     update();
-    isDragging = false;
-  }
-
-  // FIX: ТІЛЬКИ touch, І ТІЛЬКИ passive:false
-  track.addEventListener("touchstart", onTouchStart, { passive: false });
-  track.addEventListener("touchmove", onTouchMove, { passive: false });
-  track.addEventListener("touchend", onTouchEnd);
-
-  // Захист від drag на відео
-  document.querySelectorAll(".slide video").forEach(v => {
-    v.setAttribute("playsinline", "");
-    v.addEventListener("dragstart", e => e.preventDefault());
-  });
-
-  update();
-})();
-
 </script>
+
 
 
     <!-- FIREBASE -->
