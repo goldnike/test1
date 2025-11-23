@@ -526,45 +526,40 @@
         });
     </script>
 
+<script>
+    const track = document.querySelector(".carousel-track");
+    const slides = document.querySelectorAll(".slide");
 
-    <script>
-        const track = document.querySelector(".carousel-track");
-        const slides = Array.from(document.querySelectorAll(".slide"));
+    let currentSlide = 0;
+    let startX = 0;
+    let isDragging = false;
 
-        let currentSlide = 0;
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
+    function updateSlidePosition() {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
 
-        function updateSlidePosition() {
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    track.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+
+    track.addEventListener("touchend", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (diff > 50 && currentSlide < slides.length - 1) {
+            currentSlide++;
+        } else if (diff < -50 && currentSlide > 0) {
+            currentSlide--;
         }
 
-        track.addEventListener("touchstart", (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        });
+        updateSlidePosition();
+    });
+</script>
 
-        track.addEventListener("touchmove", (e) => {
-            if (!isDragging) return;
-            currentX = e.touches[0].clientX;
-        });
-
-        track.addEventListener("touchend", () => {
-            if (!isDragging) return;
-
-            let diff = startX - currentX;
-
-            if (diff > 50) {
-                currentSlide = (currentSlide + 1) % slides.length;
-            } else if (diff < -50) {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            }
-
-            updateSlidePosition();
-            isDragging = false;
-        });
-    </script>
 
 </body>
 
